@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import db.DB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.dao.DaoFactory;
 import model.dao.impl.BookDaoJDBC;
@@ -60,17 +62,24 @@ public class AddNewBookController implements Initializable {
 		book.setBookInternalId(Integer.parseInt(this.bookInternalCode.getText()));
 		Genre genre = genreBox.getSelectionModel().getSelectedItem();// capturing the book genre
 		book.setGenre(genre);
-		bookDao.insert(book);
+		
+		bookDao.insert(book);// insert elements into database
+		
+		cleanFields();
 	}
 
+	@FXML
 	public void onCancel() {
-
+		Stage stage = (Stage)this.btCancel.getScene().getWindow();
+		DB.closeConnection();
+		stage.close();
 	}
 	
 	private void cleanFields() {
 		this.bookTitle.setText("");
 		this.author.setText("");
 		this.publisher.setText("");
+		this.bookInternalCode.setText("");
 	}
 
 	@Override

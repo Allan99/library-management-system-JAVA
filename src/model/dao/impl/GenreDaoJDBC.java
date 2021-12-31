@@ -21,13 +21,27 @@ public class GenreDaoJDBC  implements GenreDao{
 	}
 	
 	@Override
-	public void insert(Genre book) {
-		// TODO Auto-generated method stub
-		
+	public void insert(Genre genre) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO genre (GenreName) "
+					+ "VALUES (?)");
+			
+			String name = genre.getName();
+			st.setString(1, name);
+	
+			st.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DBException(e.getMessage());
+		}finally {
+			DB.closePreparedStatement(st);
+		}
 	}
 
 	@Override
-	public void update(Genre book) {
+	public void update(Genre genre) {
 		// TODO Auto-generated method stub
 		
 	}
